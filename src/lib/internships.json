@@ -1,0 +1,28 @@
+[
+  {
+    "title": "Product Manager Intern",
+    "company": "Google",
+    "type": "Remote",
+    "location": "Bangalore",
+    "stipend": "₹10,000/month",
+    "duration": "3 months",
+    "requiredSkills": ["PM", "Agile", "SQL"],
+    "description": "Assist in product roadmap development",
+    "matchScore": 85,
+    "applicationDeadline": "2025-09-30",
+    "startDate": "2025-10-15"
+  },
+  {
+    "title": "Product Manager Intern",
+    "company": "Amazon",
+    "type": "Hybrid",
+    "location": "Hyderabad",
+    "stipend": "₹12,000/month",
+    "duration": "6 months",
+    "requiredSkills": ["PM", "Data Analysis", "Scrum"],
+    "description": "Support product launch initiatives",
+    "matchScore": 90,
+    "applicationDeadline": "2025-10-10",
+    "startDate": "2025-11-01"
+  }
+]
