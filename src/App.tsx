@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import LoginPage from './components/Auth/LoginPage';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import InternshipList from './components/InternshipList';
@@ -6,41 +7,56 @@ import ChatBot from './components/ChatBot';
 import Cart from './components/Cart';
 import ResumeUpload from './components/ResumeUpload';
 import Profile from './components/Profile';
+import { useAuth } from './hooks/useAuth';
 import { Internship, CartItem, UserProfile } from './types';
 import { mockInternships } from './data/mockData';
 
 type Page = 'home' | 'internships' | 'cart' | 'resume' | 'profile';
 
 function App() {
+  const { user, isAuthenticated, isLoading, login, logout } = useAuth();
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile>({
-    name: '',
-    email: '',
+    name: user?.name || '',
+    email: user?.email || '',
     skills: [],
     experience: '',
     resumeUploaded: false
   });
   const [recommendations, setRecommendations] = useState<Internship[]>(mockInternships);
 
+  // Update user profile when user changes
   useEffect(() => {
-    // Load saved data from localStorage
-    const savedCart = localStorage.getItem('internshipCart');
-    const savedProfile = localStorage.getItem('userProfile');
-    
-    if (savedCart) {
-      setCartItems(JSON.parse(savedCart));
+    if (user) {
+      setUserProfile(prev => ({
+        ...prev,
+        name: user.name,
+        email: user.email
+      }));
     }
-    
-    if (savedProfile) {
-      const profile = JSON.parse(savedProfile);
-      setUserProfile(profile);
-      if (profile.skills.length > 0) {
-        generateRecommendations(profile.skills);
+  }, [user]);
+
+  useEffect(() => {
+    // Only load data if user is authenticated
+    if (isAuthenticated) {
+      const savedCart = localStorage.getItem('internshipCart');
+      const savedProfile = localStorage.getItem('userProfile');
+      
+      if (savedCart) {
+        setCartItems(JSON.parse(savedCart));
+      }
+      
+      if (savedProfile) {
+        const profile = JSON.parse(savedProfile);
+        setUserProfile(prev => ({ ...prev, ...profile }));
+        if (profile.skills.length > 0) {
+          generateRecommendations(profile.skills);
+        }
       }
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const addToCart = (internship: Internship) => {
     const existingItem = cartItems.find(item => item.id === internship.id);
@@ -81,6 +97,26 @@ function App() {
     setRecommendations(sorted);
   };
 
+  // Show loading screen while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading InternAI</h2>
+          <p className="text-gray-600">Please wait while we set up your experience...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login page if not authenticated
+  if (!isAuthenticated) {
+    return <LoginPage onLogin={login} isLoading={isLoading} />;
+  }
+
   const renderCurrentPage = () => {
     switch (currentPage) {
       case 'home':
@@ -110,6 +146,8 @@ function App() {
         currentPage={currentPage} 
         onNavigate={setCurrentPage}
         cartCount={cartItems.length}
+        user={user}
+        onLogout={logout}
       />
       
       <main className="pt-16">
