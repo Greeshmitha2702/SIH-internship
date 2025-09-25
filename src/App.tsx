@@ -10,6 +10,7 @@ import Profile from './components/Profile';
 import { useAuth } from './hooks/useAuth';
 import { Internship, CartItem, UserProfile } from './types';
 import { mockInternships } from './data/mockData';
+import SearchBar from "./components/SearchBar";
 
 type Page = 'home' | 'internships' | 'cart' | 'resume' | 'profile';
 
@@ -25,7 +26,10 @@ function App() {
     experience: '',
     resumeUploaded: false
   });
+
+  // 🔹 recommendations and filtered internships
   const [recommendations, setRecommendations] = useState<Internship[]>(mockInternships);
+  const [filteredInternships, setFilteredInternships] = useState<Internship[]>(mockInternships);
 
   // Update user profile when user changes
   useEffect(() => {
@@ -57,6 +61,11 @@ function App() {
       }
     }
   }, [isAuthenticated]);
+
+  // Whenever recommendations change, reset filteredInternships
+  useEffect(() => {
+    setFilteredInternships(recommendations);
+  }, [recommendations]);
 
   const addToCart = (internship: Internship) => {
     const existingItem = cartItems.find(item => item.id === internship.id);
@@ -97,6 +106,19 @@ function App() {
     setRecommendations(sorted);
   };
 
+  // 🔹 Search handler
+  const handleSearch = (query: string) => {
+    if (!query) {
+      setFilteredInternships(recommendations);
+    } else {
+      setFilteredInternships(
+        recommendations.filter((internship) =>
+          internship.title.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    }
+  };
+
   // Show loading screen while checking authentication
   if (isLoading) {
     return (
@@ -121,20 +143,32 @@ function App() {
     switch (currentPage) {
       case 'home':
         return <Hero onNavigate={setCurrentPage} />;
+
       case 'internships':
         return (
-          <InternshipList 
-            internships={recommendations}
-            onAddToCart={addToCart}
-            cartItems={cartItems}
-          />
+          <div className="px-4">
+            {/* 🔹 Add the SearchBar here */}
+            <SearchBar
+              onSearch={handleSearch}
+              placeholder="Search internships..."
+            />
+            <InternshipList 
+              internships={filteredInternships} // 🔹 use filtered list here
+              onAddToCart={addToCart}
+              cartItems={cartItems}
+            />
+          </div>
         );
+
       case 'cart':
         return <Cart items={cartItems} onRemove={removeFromCart} />;
+
       case 'resume':
         return <ResumeUpload onProfileUpdate={updateUserProfile} userProfile={userProfile} />;
+
       case 'profile':
         return <Profile profile={userProfile} onUpdate={updateUserProfile} />;
+
       default:
         return <Hero onNavigate={setCurrentPage} />;
     }
