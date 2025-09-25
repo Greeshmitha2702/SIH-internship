@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 import React, { useState, useEffect } from 'react';
 import LoginPage from './components/Auth/LoginPage';
 import Header from './components/Header';
@@ -204,3 +206,4 @@ function App() {
 }
 
 export default App;
+>>>>>>> 522d2504bdaa0d8ebc58b7397b104d78b8f00584

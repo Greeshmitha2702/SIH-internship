@@ -12,8 +12,15 @@
   "dependencies": {
     "@dataconnect/generated": "file:src/dataconnect-generated",
     "@supabase/supabase-js": "^2.57.4",
+<<<<<<< HEAD
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+=======
     "firebase": "^12.3.0",
+>>>>>>> 6afe505a43318a6eebb099b75265aea490571892
     "lucide-react": "^0.344.0",
+    "mongoose": "^8.18.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -33,6 +40,24 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.3.0",
+<<<<<<< HEAD
+    "vite": "^5.4.2"
+  },
+  "description": "SIH-internship",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Greeshmitha2702/SIH-internship.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Greeshmitha2702/SIH-internship/issues"
+  },
+  "homepage": "https://github.com/Greeshmitha2702/SIH-internship#readme"
+=======
     "vite": "^6.3.6"
   }
+>>>>>>> 6afe505a43318a6eebb099b75265aea490571892
 }
