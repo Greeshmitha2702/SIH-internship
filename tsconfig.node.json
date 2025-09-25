@@ -1,22 +1,10 @@
 {
+  "extends": "./tsconfig.app.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2023"],
+    "noEmit": false,            // Allow emitting JS
+    "outDir": "dist/node",      // Optional: separate folder for Node scripts
     "module": "ESNext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "moduleResolution": "node"
   },
-  "include": ["vite.config.ts"]
+  "include": ["src/lib/bulkUpload.ts"]
 }
